@@ -44,11 +44,11 @@ class baccarat:
         button_frame = tk.Frame(self.window, bg="green")
         button_frame.pack(pady=20)
         # Player Button
-        deal_button = tk.Button(button_frame, text="Player", font=('Times New Roman', 20), bg="grey", fg="black",command=lambda: self.run_game(1))
-        deal_button.pack(side="left", padx=10)
+        self.player_button = tk.Button(button_frame, text="Player", font=('Times New Roman', 20), bg="grey", fg="black",command=lambda: self.run_game(1))
+        self.player_button.pack(side="left", padx=10)
         # Banker Button
-        banker_button = tk.Button(button_frame, text="Banker", font=('Times New Roman', 20), bg="grey", fg="black", command=lambda: self.run_game(2))
-        banker_button.pack(side="left", padx=10)
+        self.banker_button = tk.Button(button_frame, text="Banker", font=('Times New Roman', 20), bg="grey", fg="black", command=lambda: self.run_game(2))
+        self.banker_button.pack(side="left", padx=10)
 
         # Making a frame for the chips
         chip_frame = tk.Frame(self.window, bg="green")
@@ -161,6 +161,9 @@ class baccarat:
         self.update_bet("Bet: $" + str(self.bet))
 
     def run_game(self, user_card_side):
+        # Disabling player and banker buttons
+        self.player_button.config(state="disabled")
+        self.banker_button.config(state="disabled")
         # Making sure the cards appear on the correct side
         if user_card_side == 1:
             user_side = 'left'
@@ -204,11 +207,15 @@ class baccarat:
         print(self.user_card_count)
         print(self.dealer_card_count)
 
-        # Working out the logic for each possability\
-        if (self.user_card_count == 8 or self.user_card_count == 9):
-            self.window.after(5000, lambda: self.update_message("User Wins"))
-        elif (self.dealer_card_count == 8 or self.dealer_card_count == 9):
-            self.window.after(5000, lambda: self.update_message("Dealer Wins"))
+        # Working out the logic for each possability
+        if (self.user_card_count == 9 and self.user_card_count != self.dealer_card_count):
+            pass
+        elif (self.dealer_card_count == 9 and self.user_card_count != self.dealer_card_count):
+            pass
+        elif (self.user_card_count == 8 and self.user_card_count != self.dealer_card_count):
+            pass
+        elif (self.dealer_card_count == 8 and self.user_card_count != self.dealer_card_count):
+            pass
         else:
             if (self.user_card_count <= 5):
                 # Adding another card to the users hand
@@ -220,17 +227,19 @@ class baccarat:
                 self.deck[1].remove(self.deck[1][card_index])
                 self.user_card_count = self.calculate_counts(self.user_cards)
                 print(self.user_card_count)
-                self.window.after(4000, lambda: self.show_cards_window(self.user_cards[1][2], user_side))
+                self.window.after(3000, lambda: self.show_cards_window(self.user_cards[1][2], user_side))
                 if (self.dealer_card_count > -1 and self.dealer_card_count < 3):
                     # Adding another card to the dealers hand
                     card_index = random.randrange(len(self.deck[0]))
-                    card = self.deck[0][card_index].dealer_cards[0].append(card)
+                    card = self.deck[0][card_index]
+                    self.dealer_cards[0].append(card)
                     self.dealer_cards[1].append(self.deck[1][card_index])
                     self.deck[0].remove(card)
                     self.deck[1].remove(self.deck[1][card_index])
                     self.dealer_card_count = self.calculate_counts(self.dealer_cards)
                     print(self.dealer_card_count)
-                    self.window.after(4000, lambda: self.show_cards_window(self.dealer_cards[1][2], dealer_side))
+                    self.window.after(5000, lambda: self.show_cards_window(self.dealer_cards[1][2], dealer_side))
+
                 elif(self.dealer_card_count == 3 and self.user_card_count != 8):
                     # Adding another card to the dealers hand
                     card_index = random.randrange(len(self.deck[0]))
@@ -241,9 +250,9 @@ class baccarat:
                     self.deck[1].remove(self.deck[1][card_index])
                     self.dealer_card_count = self.calculate_counts(self.dealer_cards)
                     print(self.dealer_card_count)
-                    self.window.after(4000, lambda: self.show_cards_window(self.dealer_cards[1][2], dealer_side))
+                    self.window.after(5000, lambda: self.show_cards_window(self.dealer_cards[1][2], dealer_side))
                 elif(self.dealer_card_count == 4 and self.user_card_count > 1 and self.user_card_count < 8):
-                    # Adding another card to the dealers hand
+                   # Adding another card to the dealers hand
                     card_index = random.randrange(len(self.deck[0]))
                     card = self.deck[0][card_index]
                     self.dealer_cards[0].append(card)
@@ -252,7 +261,7 @@ class baccarat:
                     self.deck[1].remove(self.deck[1][card_index])
                     self.dealer_card_count = self.calculate_counts(self.dealer_cards)
                     print(self.dealer_card_count)
-                    self.window.after(4000, lambda: self.show_cards_window(self.dealer_cards[1][2], dealer_side))
+                    self.window.after(5000, lambda: self.show_cards_window(self.dealer_cards[1][2], dealer_side))
                 elif(self.dealer_card_count == 5 and self.user_card_count > 3 and self.user_card_count < 8):
                     # Adding another card to the dealers hand
                     card_index = random.randrange(len(self.deck[0]))
@@ -263,7 +272,7 @@ class baccarat:
                     self.deck[1].remove(self.deck[1][card_index])
                     self.dealer_card_count = self.calculate_counts(self.dealer_cards)
                     print(self.dealer_card_count)
-                    self.window.after(4000, lambda: self.show_cards_window(self.dealer_cards[1][2], dealer_side))
+                    self.window.after(5000, lambda: self.show_cards_window(self.dealer_cards[1][2], dealer_side))
                 elif(self.dealer_card_count == 6 and self.user_card_count > 5 and self.user_card_count < 8):
                     # Adding another card to the dealers hand
                     card_index = random.randrange(len(self.deck[0]))
@@ -274,9 +283,8 @@ class baccarat:
                     self.deck[1].remove(self.deck[1][card_index])
                     self.dealer_card_count = self.calculate_counts(self.dealer_cards)
                     print(self.dealer_card_count)
-                    self.window.after(4000, lambda: self.show_cards_window(self.dealer_cards[1][2], dealer_side))
+                    self.window.after(5000, lambda: self.show_cards_window(self.dealer_cards[1][2], dealer_side))
             else:
-                if (self.dealer_card_count > -1 and self.dealer_card_count < 6):
                 # Adding another card to the dealers hand
                     card_index = random.randrange(len(self.deck[0]))
                     card = self.deck[0][card_index]
@@ -286,12 +294,21 @@ class baccarat:
                     self.deck[1].remove(self.deck[1][card_index])
                     self.dealer_card_count = self.calculate_counts(self.dealer_cards)
                     print(self.dealer_card_count)
-                    self.window.after(4000, lambda: self.show_cards_window(self.dealer_cards[1][2], dealer_side))
+                    self.window.after(3000, lambda: self.show_cards_window(self.dealer_cards[1][2], dealer_side))
         # Checking to see who won
         if self.user_card_count > self.dealer_card_count:
             self.window.after(5000, lambda: self.update_message("User Wins"))
-        else:
+            self.balance += self.bet
+        elif self.user_card_count < self.dealer_card_count:
             self.window.after(5000, lambda: self.update_message("Dealer Wins"))
+            self.balance -= self.bet
+        else:
+            self.window.after(5000, lambda: self.update_message("Tie"))
+        # Updating player bet and balance
+        self.bet = 0
+        self.window.after(5000, lambda: self.update_balance("Balance: $" + str(self.balance)))
+        self.window.after(5000, lambda: self.update_bet("Bet: $" + str(self.bet)))
+        self.window.after(5000, lambda: self.window.after(3000, lambda: self.reset()))
 
         
 
@@ -335,10 +352,37 @@ class baccarat:
                 total += rank
      
         return total % 10
+    
+    def reset(self):
+        # Resetting game
+        self.bet = 0
+        self.deck = None
+        self.user_card_count = 0
+        self.dealer_card_count = 0
+        # Getting rid of cards on screen
+        self.clear_card_images()
+        # Enabling player and banker buttons
+        self.player_button.config(state="normal")
+        self.banker_button.config(state="normal")
+
+        # Updating player bet and balance
+        self.update_bet("Bet: $" + str(self.bet))
+        self.update_message("")
+
+        self.window.update_idletasks()
+
+    def clear_card_images(self):
+        # Clears all card images on screen
+        for label in self.card_labels:
+            label.destroy()
+        self.card_labels.clear()
+   
 
 
 d1 = baccarat()
 d1.setup_window()
+
+
 
 
 
